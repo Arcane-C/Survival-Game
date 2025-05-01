@@ -2,14 +2,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 //using System.Numerics;
+using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))] 
+//[RequireComponent(typeof(Rigidbody2D))] 
 //^^^ini klo malas nambahin rigidbody, jd setiap kita masukkan script movement ke objek maka objek tsb otomatis mendapat rigidbody2d
 
-public class Movements : MonoBehaviour
+public class Movement : MonoBehaviour
 {
 
+    public void SetDirection(Vector2 direction)
+    {
+
+    }
+
+//untuk input system kita pakai yg dibawah ini:
+    public void SetDirection(CallbackContext ctx) //#using static UnityEngine.InputSystem.InputAction;
+    {
+        if (ctx.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
+        {
+            Vector2 direction = ctx.ReadValue<Vector2>();
+            print($"Set Direction {direction}");
+        }
+        
+    }
+
+/*
     [SerializeField, Range(5f, 20f)] private float speed;
     private Rigidbody2D rb2d;
     private float direction;
@@ -43,4 +61,5 @@ public class Movements : MonoBehaviour
     {
         this.direction = direction;
     }
+    */
 }
