@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 //using System.Numerics;
+using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
 
@@ -10,19 +11,27 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    [SerializeField] private float speed;
+    private Rigidbody2D rb2d;
+
+    private void Awake()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+    }
 
     public void SetDirection(Vector2 direction)
     {
-
+        rb2d.linearVelocity = direction * speed;
     }
 
 //untuk input system kita pakai yg dibawah ini:
     public void SetDirection(CallbackContext ctx) //#using static UnityEngine.InputSystem.InputAction;
     {
-        if (ctx.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
+        if (ctx.phase == InputActionPhase.Performed || ctx.phase == InputActionPhase.Canceled)
         {
             Vector2 direction = ctx.ReadValue<Vector2>();
-            print($"Set Direction {direction}");
+            //print($"Set Direction {direction}");
+            SetDirection(direction);
         }
         
     }
