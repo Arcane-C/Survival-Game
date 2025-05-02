@@ -12,19 +12,36 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private float finalSpeed;
     private Rigidbody2D rb2d;
+    List<Buff> buffs = new List<Buff>();
 
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
     }
 
+    private void Start()
+    {
+        buffs.Add(new Buff(1.5f, 30));
+    }
     public void SetDirection(Vector2 direction)
     {
-        rb2d.linearVelocity = direction * speed;
+        finalSpeed = speed * GetAllBuffModifier();
+        rb2d.linearVelocity = direction * finalSpeed;
     }
 
-//untuk input system kita pakai yg dibawah ini:
+    private float GetAllBuffModifier() //speed buff or debuff
+    {
+        float modifier = 1;
+        foreach(Buff b in buffs)
+        {
+            modifier *= b.modifier;
+        }
+        return modifier;
+    }
+
+    //untuk input system kita pakai yg dibawah ini:
     public void SetDirection(CallbackContext ctx) //#using static UnityEngine.InputSystem.InputAction;
     {
         if (ctx.phase == InputActionPhase.Performed || ctx.phase == InputActionPhase.Canceled)
@@ -71,4 +88,17 @@ public class Movement : MonoBehaviour
         this.direction = direction;
     }
     */
+}
+
+internal class Buff
+{
+    
+    public float modifier;
+    public float duration; 
+    
+    public Buff(float modifier, float duration) //constructor
+    {
+        this.modifier = modifier;
+        this.duration = duration;
+    }
 }
